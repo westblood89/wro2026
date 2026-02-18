@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WRO 2026 Türkiye - Puan ve İhtimaller Paneli</title>
+    <style>
+        :root {
+            --primary-color: #009688;
+            --secondary-color: #FF5722;
+            --header-bg: #333;
+            --light-bg: #f9f9f9;
+            --border-color: #ddd;
+            --checked-bg: #d1e7dd; /* Yeşil arka plan */
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 10px; background-color: #f0f2f5; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        /* Sekmeler */
+        .tabs { display: flex; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 2px solid #ddd; gap: 5px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: #eee; cursor: pointer; font-weight: bold; color: #666; border-radius: 8px 8px 0 0; min-width: 180px; transition: 0.3s; }
+        .tab-btn.active { background: var(--header-bg); color: white; }
+
+        /* Renkler */
+        .c-red { color: #d32f2f; font-weight: bold; }
+        .c-green { color: #2e7d32; font-weight: bold; }
+        .c-blue { color: #1565c0; font-weight: bold; }
+        .c-yellow { color: #f9a825; font-weight: bold; }
+        .c-black { color: #000; font-weight: bold; }
+        .c-white { color: #999; font-weight: bold; } /* Beyaz - Gri Yazı */
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Puan Tablosu Stilleri */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid var(--border-color); padding: 10px; text-align: left; }
+        th { background-color: var(--header-bg); color: white; }
+        .section-header { background-color: #f1f1f1; font-weight: bold; }
+
+        /* Kontrol Elemanları */
+        input[type="number"] { width: 50px; text-align: center; padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
+
+        /* İhtimaller Sayfası Stilleri */
+        .checklist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+        .checklist-item { display: flex; align-items: center; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        
+        /* İşaretlenmiş Eleman Stili (Üstü çizili değil, sadece yeşil arka plan) */
+        .checklist-item.checked { 
+            background-color: var(--checked-bg); 
+            border-color: #a3cfbb;
+            color: #333; 
+        }
+        
+        .checklist-item input { margin-right: 12px; transform: scale(1.3); pointer-events: none; }
+
+        .group-box { border: 2px solid #f0f0f0; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #fafafa; }
+        .group-title { margin-top: 0; color: #333; border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-bottom: 10px; }
+
+        .action-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .btn { border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
+        .btn-clear { background: #ff9800; }
+        .btn-save { background: #2196F3; }
+        .btn-load { background: #673AB7; }
+
+        .total-sticky { position: sticky; bottom: 0; background: var(--header-bg); color: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .reset-btn { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('score-ls', this)">Küçük Yıldızlar Puan</button>
+        <button class="tab-btn" onclick="openTab('prob-ls', this)">Küçük Yıldızlar İhtimaller</button>
+        <button class="tab-btn" onclick="openTab('score-s', this)">Yıldızlar Puan</button>
+        <button class="tab-btn" onclick="openTab('prob-s', this)">Yıldızlar İhtimaller</button>
+    </div>
+
+    <div id="content-score-ls" class="tab-content active">
+        <h2 style="color:var(--primary-color)">Küçük Yıldızlar Puan Hesaplama</h2>
+        <form id="form-ls">
+            <table>
+                <thead><tr><th>Görevler</th><th>Puan</th><th>#</th><th>Toplam</th></tr></thead>
+                <tbody>
+                    <tr class="section-header"><td colspan="4">1. Amfiyi hoparlöre bağlama</td></tr>
+                    <tr><td>Kablo tamamen içinde, düz ve dik</td><td>15</td><td><input type="number" id="ls_c_f" min="0" max="2" value="0" onchange="calcLS()"></td><td id="res_ls_c_f">0</td></tr>
+                    <tr><td>Kablo kısmen içinde veya düz/dik değil</td><td>5</td><td><input type="number" id="ls_c_p" min="0" max="2" value="0" onchange="calcLS()"></td><td id="res_ls_c_p">0</td></tr>
+                    
+                    <tr class="section-header"><td colspan="4">2. Gösteri hazırlığı</td></tr>
+                    <tr><td>Mikrofon tamamen içinde, düz ve dik</td><td>20</td><td><input type="number" id="ls_m_f" min="0" max="1" value="0" onchange="calcLS()"></td><td id="res_ls_m_f">0</td></tr>
+                    <tr><td>Mikrofon kısmen içinde</td><td>10</td><td><input type="number" id="ls_m_p" min="0" max="1" value="0" onchange="calcLS()"></td><td id="res_ls_m_p">0</td></tr>
+                    <tr><td>Enstrüman tamamen sahne arkasında</td><td>15</td><td><input type="number" id="ls_i" min="0" max="3" value="0" onchange="calcLS()"></td><td id="res_ls_i">0</td></tr>
+
+                    <tr class="section-header"><td colspan="4">3. Şarkıyı çal</td></tr>
+                    <tr><td>Nota tamamen içinde, düz ve dik</td><td>20</td><td><input type="number" id="ls_n_f" min="0" max="6" value="0" onchange="calcLS()"></td><td id="res_ls_n_f">0</td></tr>
+                    <tr><td>Nota kısmen içinde</td><td>10</td><td><input type="number" id="ls_n_p" min="0" max="6" value="0" onchange="calcLS()"></td><td id="res_ls_n_p">0</td></tr>
+
+                    <tr class="section-header"><td colspan="4">4. Bonus puanlar</td></tr>
+                    <tr><td>Sol anahtarı zarar görmemiş</td><td>10</td><td><input type="checkbox" id="ls_b_s" onchange="calcLS()"></td><td id="res_ls_b_s">0</td></tr>
+                    <tr><td>Hoparlör zarar görmemiş (x2)</td><td>10</td><td><input type="number" id="ls_b_h" min="0" max="2" value="0" onchange="calcLS()"></td><td id="res_ls_b_h">0</td></tr>
+                    <tr><td>Amfi zarar görmemiş</td><td>10</td><td><input type="checkbox" id="ls_b_a" onchange="calcLS()"></td><td id="res_ls_b_a">0</td></tr>
+                </tbody>
+            </table>
+        </form>
+        <div class="total-sticky">
+            <button class="reset-btn" onclick="resetScore('ls')">Sıfırla</button>
+            <div style="font-size:1.4rem">Küçük Yıldızlar Toplam: <span id="ls_total">0</span> / 255</div>
+        </div>
+    </div>
+
+    <div id="content-prob-ls" class="tab-content">
+        <h2>Küçük Yıldızlar İhtimaller Listesi</h2>
+        <div class="action-bar">
+            <button class="btn btn-clear" onclick="clearProb('ls')">Temizle</button>
+            <button class="btn btn-save" onclick="saveJSON('ls')">Kaydet</button>
+            <button class="btn btn-load" onclick="document.getElementById('file-ls').click()">Yükle</button>
+            <input type="file" id="file-ls" style="display:none" onchange="loadJSON(event, 'ls')">
+        </div>
+        <div id="ls-group-container"></div>
+    </div>
+
+    <div id="content-score-s" class="tab-content">
+        <h2 style="color:var(--secondary-color)">Yıldızlar Puan Hesaplama</h2>
+        <form id="form-s">
+            <table>
+                <thead><tr><th>Görevler</th><th>Puan</th><th>#</th><th>Toplam</th></tr></thead>
+                <tbody>
+                    <tr class="section-header"><td colspan="4">1. Ziyaretçilere Rehberlik Et</td></tr>
+                    <tr><td>Ziyaretçi tamamen içinde ve dik</td><td>10</td><td><input type="number" id="s_z_f" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_z_f">0</td></tr>
+                    <tr><td>Ziyaretçi kısmen içinde</td><td>5</td><td><input type="number" id="s_z_p" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_z_p">0</td></tr>
+
+                    <tr class="section-header"><td colspan="4">2. Kuleleri Yeniden İnşa Et</td></tr>
+                    <tr><td>Kırmızı kule tamamen hedefte</td><td>15</td><td><input type="number" id="s_kr_f" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_kr_f">0</td></tr>
+                    <tr><td>Kırmızı kule kısmen hedefte</td><td>10</td><td><input type="number" id="s_kr_p" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_kr_p">0</td></tr>
+                    <tr><td>Sarı kule (tam taban + doğru montaj)</td><td>25</td><td><input type="number" id="s_sa_f" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_sa_f">0</td></tr>
+                    <tr><td>Sarı kule (kısmen taban + doğru montaj)</td><td>15</td><td><input type="number" id="s_sa_p" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_sa_p">0</td></tr>
+
+                    <tr class="section-header"><td colspan="4">3. Tarihi Eserleri Müzeye Getir</td></tr>
+                    <tr><td>Eser tamamen müzede ve dik</td><td>15</td><td><input type="number" id="s_e_f" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_e_f">0</td></tr>
+                    <tr><td>Eser kısmen müzede</td><td>5</td><td><input type="number" id="s_e_p" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_e_p">0</td></tr>
+
+                    <tr class="section-header"><td colspan="4">4. Taş Döşeme & Bonus</td></tr>
+                    <tr><td>Kir parçacıkları değmiyor (x10)</td><td>2</td><td><input type="number" id="s_kir" min="0" max="10" value="0" onchange="calcS()"></td><td id="res_s_kir">0</td></tr>
+                    <tr><td>Bariyerler zarar görmemiş (x2)</td><td>10</td><td><input type="number" id="s_bar" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_bar">0</td></tr>
+                    <tr><td>Papağan zarar görmemiş</td><td>10</td><td><input type="checkbox" id="s_pap" onchange="calcS()"></td><td id="res_s_pap">0</td></tr>
+                </tbody>
+            </table>
+        </form>
+        <div class="total-sticky">
+            <button class="reset-btn" onclick="resetScore('s')">Sıfırla</button>
+            <div style="font-size:1.4rem">Yıldızlar Toplam: <span id="s_total">0</span> / 230</div>
+        </div>
+    </div>
+
+    <div id="content-prob-s" class="tab-content">
+        <h2>Yıldızlar İhtimaller Listesi</h2>
+        <div class="action-bar">
+            <button class="btn btn-clear" onclick="clearProb('s')">Temizle</button>
+            <button class="btn btn-save" onclick="saveJSON('s')">Kaydet</button>
+            <button class="btn btn-load" onclick="document.getElementById('file-s').click()">Yükle</button>
+            <input type="file" id="file-s" style="display:none" onchange="loadJSON(event, 's')">
+        </div>
+        <div id="s-matrix-container"></div>
+    </div>
+</div>
+
+<script>
+    const colors = { 'Sarı': 'c-yellow', 'Lacivert': 'c-blue', 'Siyah': 'c-black', 'Beyaz': 'c-white', 'Kırmızı': 'c-red', 'Yeşil': 'c-green' };
+    function cS(txt) { return `<span class="${colors[txt] || ''}">${txt}</span>`; }
+
+    function openTab(id, btn) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById('content-' + id).classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    // --- PUANLAMA MANTIĞI ---
+    function calcLS() {
+        let t = 0;
+        const f = { ls_c_f: 15, ls_c_p: 5, ls_m_f: 20, ls_m_p: 10, ls_i: 15, ls_n_f: 20, ls_n_p: 10, ls_b_h: 10 };
+        for(let k in f) {
+            let v = parseInt(document.getElementById(k).value) || 0;
+            document.getElementById('res_'+k).innerText = v * f[k];
+            t += v * f[k];
+        }
+        let sol = document.getElementById('ls_b_s').checked ? 10 : 0;
+        let amf = document.getElementById('ls_b_a').checked ? 10 : 0;
+        document.getElementById('res_ls_b_s').innerText = sol;
+        document.getElementById('res_ls_b_a').innerText = amf;
+        document.getElementById('ls_total').innerText = t + sol + amf;
+    }
+
+    function calcS() {
+        let t = 0;
+        const f = { s_z_f: 10, s_z_p: 5, s_kr_f: 15, s_kr_p: 10, s_sa_f: 25, s_sa_p: 15, s_e_f: 15, s_e_p: 5, s_kir: 2, s_bar: 10 };
+        for(let k in f) {
+            let v = parseInt(document.getElementById(k).value) || 0;
+            document.getElementById('res_'+k).innerText = v * f[k];
+            t += v * f[k];
+        }
+        let pap = document.getElementById('s_pap').checked ? 10 : 0;
+        document.getElementById('res_s_pap').innerText = pap;
+        document.getElementById('s_total').innerText = t + pap;
+    }
+
+    function resetScore(cat) {
+        document.getElementById('form-'+cat).reset();
+        cat === 'ls' ? calcLS() : calcS();
+    }
+
+    // --- İHTİMALLER ÜRETİMİ ---
+    function initLSProbs() {
+        const cont = document.getElementById('ls-group-container');
+        const vars = ['Sarı', 'Lacivert', 'Siyah', 'Beyaz'];
+        const fixed = [cS('Kırmızı'), cS('Yeşil')];
+        
+        const getPerms = arr => {
+            if (arr.length <= 2) return arr.length === 2 ? [arr, [arr[1], arr[0]]] : [arr];
+            return arr.reduce((acc, item, i) => acc.concat(getPerms([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [item, ...val])), []);
+        };
+
+        const perms = getPerms(vars);
+        const groups = {};
+        perms.forEach(p => { if(!groups[p[0]]) groups[p[0]] = []; groups[p[0]].push(p); });
+
+        for(let head in groups) {
+            let box = `<div class="group-box"><h3>${cS(head)} ile Başlayanlar</h3><div class="checklist-grid">`;
+            groups[head].forEach((p, idx) => {
+                const uid = `ls_v2_${head}_${idx}`;
+                const chk = localStorage.getItem(uid) === 'true' ? 'checked' : '';
+                box += `<div class="checklist-item ${chk}" onclick="toggleProb('${uid}', this)">
+                    <input type="checkbox" ${chk?'checked':''}>
+                    <div>${cS(p[0])} - ${cS(p[1])} - ${fixed[0]} - ${fixed[1]} - ${cS(p[2])} - ${cS(p[3])}</div>
+                </div>`;
+            });
+            cont.innerHTML += box + `</div></div>`;
+        }
+    }
+
+    function initSProbs() {
+        const cont = document.getElementById('s-matrix-container');
+        const list = ['Kırmızı', 'Sarı', 'Yeşil', 'Siyah', 'Beyaz', 'Lacivert'];
+        list.forEach(f => {
+            let box = `<div class="group-box"><h3>İlk Renk: ${cS(f)}</h3><div class="checklist-grid">`;
+            list.forEach(s => {
+                if(f===s) return;
+                const uid = `s_v2_${f}_${s}`;
+                const chk = localStorage.getItem(uid) === 'true' ? 'checked' : '';
+                box += `<div class="checklist-item ${chk}" onclick="toggleProb('${uid}', this)">
+                    <input type="checkbox" ${chk?'checked':''}>
+                    <div>Sonraki: ${cS(s)}</div>
+                </div>`;
+            });
+            cont.innerHTML += box + `</div></div>`;
+        });
+    }
+
+    function toggleProb(id, el) {
+        const cb = el.querySelector('input');
+        cb.checked = !cb.checked;
+        el.classList.toggle('checked', cb.checked);
+        localStorage.setItem(id, cb.checked);
+    }
+
+    function clearProb(cat) {
+        if(!confirm('İşaretlemeleri temizlemek istediğinize emin misiniz?')) return;
+        const prefix = cat === 'ls' ? 'ls_v2_' : 's_v2_';
+        Object.keys(localStorage).forEach(k => { if(k.startsWith(prefix)) localStorage.removeItem(k); });
+        location.reload();
+    }
+
+    function saveJSON(cat) {
+        const data = {};
+        const prefix = cat === 'ls' ? 'ls_v2_' : 's_v2_';
+        Object.keys(localStorage).forEach(k => { if(k.startsWith(prefix)) data[k] = localStorage.getItem(k); });
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `wro_2026_${cat}_ilerleme.json`;
+        a.click();
+    }
+
+    function loadJSON(ev, cat) {
+        const file = ev.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const data = JSON.parse(e.target.result);
+            Object.keys(data).forEach(k => localStorage.setItem(k, data[k]));
+            location.reload();
+        };
+        reader.readAsText(file);
+    }
+
+    window.onload = () => { initLSProbs(); initSProbs(); calcLS(); calcS(); };
+</script>
+
+</body>
+</html>
