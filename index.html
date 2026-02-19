@@ -10,7 +10,7 @@
             --secondary-color: #FF5722; /* Yıldızlar */
             --header-bg: #333;
             --border-color: #ddd;
-            --checked-bg: #d1e7dd; /* Yeşil Arka Plan */
+            --checked-bg: #d1e7dd; 
             --checked-border: #a3cfbb;
         }
 
@@ -66,8 +66,6 @@
             cursor: pointer; transition: all 0.2s ease; 
         }
         .checklist-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        
-        /* Sadece Arka Plan Yeşil Olur, Üstü Çizilmez */
         .checklist-item.checked { 
             background-color: var(--checked-bg); 
             border-color: var(--checked-border);
@@ -108,22 +106,22 @@
             <table>
                 <thead><tr><th style="width:55%">Görevler</th><th>Puan</th><th>Adet</th><th>Toplam</th></tr></thead>
                 <tbody>
-                    <tr class="section-header"><td colspan="4">1. Amfiyi hoparlöre bağlama</td></tr>
-                    <tr><td>Kablo gri alanın tamamen içinde, düz ve dik</td><td>15</td><td><input type="number" id="ls_kb_f" min="0" max="2" value="0" onchange="calcLS()"></td><td id="res_ls_kb_f">0</td></tr>
-                    <tr><td>Kablo gri alanın kısmen içinde veya düz/dik değil</td><td>5</td><td><input type="number" id="ls_kb_p" min="0" max="2" value="0" onchange="calcLS()"></td><td id="res_ls_kb_p">0</td></tr>
+                    <tr class="section-header"><td colspan="4">1. Amfiyi hoparlöre bağlama (Maksimum 2 Kablo)</td></tr>
+                    <tr><td>Kablo gri alanın tamamen içinde, düz ve dik</td><td>15</td><td><input type="number" id="ls_kb_f" min="0" max="2" value="0" onchange="validateGroup('ls_kb_f', ['ls_kb_f','ls_kb_p'], 2); calcLS();"></td><td id="res_ls_kb_f">0</td></tr>
+                    <tr><td>Kablo gri alanın kısmen içinde veya düz/dik değil</td><td>5</td><td><input type="number" id="ls_kb_p" min="0" max="2" value="0" onchange="validateGroup('ls_kb_p', ['ls_kb_f','ls_kb_p'], 2); calcLS();"></td><td id="res_ls_kb_p">0</td></tr>
                     
-                    <tr class="section-header"><td colspan="4">2. Gösteri hazırlığı</td></tr>
-                    <tr><td>Mikrofon hedef alanın tamamen içinde, düz ve dik</td><td>20</td><td><input type="number" id="ls_mk_f" min="0" max="1" value="0" onchange="calcLS()"></td><td id="res_ls_mk_f">0</td></tr>
-                    <tr><td>Mikrofon hedef alanın kısmen içinde veya düz/dik değil</td><td>10</td><td><input type="number" id="ls_mk_p" min="0" max="1" value="0" onchange="calcLS()"></td><td id="res_ls_mk_p">0</td></tr>
+                    <tr class="section-header"><td colspan="4">2. Gösteri hazırlığı (Maks 1 Mikrofon / 3 Enstrüman)</td></tr>
+                    <tr><td>Mikrofon tamamen içinde, düz ve dik</td><td>20</td><td><input type="number" id="ls_mk_f" min="0" max="1" value="0" onchange="validateGroup('ls_mk_f', ['ls_mk_f','ls_mk_p'], 1); calcLS();"></td><td id="res_ls_mk_f">0</td></tr>
+                    <tr><td>Mikrofon kısmen içinde veya düz/dik değil</td><td>10</td><td><input type="number" id="ls_mk_p" min="0" max="1" value="0" onchange="validateGroup('ls_mk_p', ['ls_mk_f','ls_mk_p'], 1); calcLS();"></td><td id="res_ls_mk_p">0</td></tr>
                     <tr><td>Enstrüman tamamen sahne arkası alanının içinde</td><td>15</td><td><input type="number" id="ls_ens" min="0" max="3" value="0" onchange="calcLS()"></td><td id="res_ls_ens">0</td></tr>
 
-                    <tr class="section-header"><td colspan="4">3. Şarkıyı çal</td></tr>
-                    <tr><td>Nota hedef alanının tamamen içinde, düz ve dik</td><td>20</td><td><input type="number" id="ls_nt_f" min="0" max="6" value="0" onchange="calcLS()"></td><td id="res_ls_nt_f">0</td></tr>
-                    <tr><td>Nota hedef alanının kısmen içinde veya düz/dik değil</td><td>10</td><td><input type="number" id="ls_nt_p" min="0" max="6" value="0" onchange="calcLS()"></td><td id="res_ls_nt_p">0</td></tr>
+                    <tr class="section-header"><td colspan="4">3. Şarkıyı çal (Maksimum 6 Nota)</td></tr>
+                    <tr><td>Nota hedef alanının tamamen içinde, düz ve dik</td><td>20</td><td><input type="number" id="ls_nt_f" min="0" max="6" value="0" onchange="validateGroup('ls_nt_f', ['ls_nt_f','ls_nt_p'], 6); calcLS();"></td><td id="res_ls_nt_f">0</td></tr>
+                    <tr><td>Nota hedef alanının kısmen içinde veya düz/dik değil</td><td>10</td><td><input type="number" id="ls_nt_p" min="0" max="6" value="0" onchange="validateGroup('ls_nt_p', ['ls_nt_f','ls_nt_p'], 6); calcLS();"></td><td id="res_ls_nt_p">0</td></tr>
 
                     <tr class="section-header"><td colspan="4">4. Bonus Puan</td></tr>
                     <tr><td>Sol anahtarı zarar görmemiş/hareket ettirilmemiş</td><td>10</td><td><input type="checkbox" id="ls_bon_sol" onchange="calcLS()"></td><td id="res_ls_bon_sol">0</td></tr>
-                    <tr><td>Hoparlör zarar görmemiş/hareket ettirilmemiş (x2)</td><td>10</td><td><input type="number" id="ls_bon_hop" min="0" max="2" value="0" onchange="calcLS()"></td><td id="res_ls_bon_hop">0</td></tr>
+                    <tr><td>Hoparlör zarar görmemiş/hareket ettirilmemiş (Maks 2)</td><td>10</td><td><input type="number" id="ls_bon_hop" min="0" max="2" value="0" onchange="calcLS()"></td><td id="res_ls_bon_hop">0</td></tr>
                     <tr><td>Amfi zarar görmemiş/hareket ettirilmemiş</td><td>10</td><td><input type="checkbox" id="ls_bon_amf" onchange="calcLS()"></td><td id="res_ls_bon_amf">0</td></tr>
                 </tbody>
             </table>
@@ -151,21 +149,21 @@
             <table>
                 <thead><tr><th style="width:55%">Görevler</th><th>Puan</th><th>Adet</th><th>Toplam</th></tr></thead>
                 <tbody>
-                    <tr class="section-header"><td colspan="4">1. Ziyaretçilere Rehberlik Et</td></tr>
-                    <tr><td>Ziyaretçi tamamen kendi renk alanının içinde ve dik</td><td>10</td><td><input type="number" id="s_ziy_f" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_ziy_f">0</td></tr>
-                    <tr><td>Ziyaretçi kısmen kendi renk alanında veya dik değil</td><td>5</td><td><input type="number" id="s_ziy_p" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_ziy_p">0</td></tr>
+                    <tr class="section-header"><td colspan="4">1. Ziyaretçilere Rehberlik Et (Maksimum 4 Ziyaretçi)</td></tr>
+                    <tr><td>Ziyaretçi tamamen kendi renk alanının içinde ve dik</td><td>10</td><td><input type="number" id="s_ziy_f" min="0" max="4" value="0" onchange="validateGroup('s_ziy_f', ['s_ziy_f','s_ziy_p'], 4); calcS();"></td><td id="res_s_ziy_f">0</td></tr>
+                    <tr><td>Ziyaretçi kısmen kendi renk alanında veya dik değil</td><td>5</td><td><input type="number" id="s_ziy_p" min="0" max="4" value="0" onchange="validateGroup('s_ziy_p', ['s_ziy_f','s_ziy_p'], 4); calcS();"></td><td id="res_s_ziy_p">0</td></tr>
 
-                    <tr class="section-header"><td colspan="4">2. Kuleleri Yeniden İnşa Et</td></tr>
-                    <tr><td>Kırmızı kule tamamen hedefte ve dik</td><td>15</td><td><input type="number" id="s_kr_f" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_kr_f">0</td></tr>
-                    <tr><td>Kırmızı kule kısmen hedefte veya dik değil</td><td>10</td><td><input type="number" id="s_kr_p" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_kr_p">0</td></tr>
-                    <tr><td>Sarı kule üstü doğru + tabanı tamamen hedefte</td><td>25</td><td><input type="number" id="s_sa_f" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_sa_f">0</td></tr>
-                    <tr><td>Sarı kule üstü doğru + tabanı kısmen hedefte</td><td>15</td><td><input type="number" id="s_sa_p" min="0" max="2" value="0" onchange="calcS()"></td><td id="res_s_sa_p">0</td></tr>
+                    <tr class="section-header"><td colspan="4">2. Kuleleri Yeniden İnşa Et (Maks 2 Kırmızı / 2 Sarı)</td></tr>
+                    <tr><td>Kırmızı kule tamamen hedefte ve dik</td><td>15</td><td><input type="number" id="s_kr_f" min="0" max="2" value="0" onchange="validateGroup('s_kr_f', ['s_kr_f','s_kr_p'], 2); calcS();"></td><td id="res_s_kr_f">0</td></tr>
+                    <tr><td>Kırmızı kule kısmen hedefte veya dik değil</td><td>10</td><td><input type="number" id="s_kr_p" min="0" max="2" value="0" onchange="validateGroup('s_kr_p', ['s_kr_f','s_kr_p'], 2); calcS();"></td><td id="res_s_kr_p">0</td></tr>
+                    <tr><td>Sarı kule üstü doğru + tabanı tamamen hedefte</td><td>25</td><td><input type="number" id="s_sa_f" min="0" max="2" value="0" onchange="validateGroup('s_sa_f', ['s_sa_f','s_sa_p'], 2); calcS();"></td><td id="res_s_sa_f">0</td></tr>
+                    <tr><td>Sarı kule üstü doğru + tabanı kısmen hedefte</td><td>15</td><td><input type="number" id="s_sa_p" min="0" max="2" value="0" onchange="validateGroup('s_sa_p', ['s_sa_f','s_sa_p'], 2); calcS();"></td><td id="res_s_sa_p">0</td></tr>
 
-                    <tr class="section-header"><td colspan="4">3. Tarihi Eserleri Müzeye Getir</td></tr>
-                    <tr><td>Tarihi eser tamamen müzede ve dik</td><td>15</td><td><input type="number" id="s_es_f" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_es_f">0</td></tr>
-                    <tr><td>Tarihi eser kısmen müzede veya dik değil</td><td>5</td><td><input type="number" id="s_es_p" min="0" max="4" value="0" onchange="calcS()"></td><td id="res_s_es_p">0</td></tr>
+                    <tr class="section-header"><td colspan="4">3. Tarihi Eserleri Müzeye Getir (Maksimum 4 Eser)</td></tr>
+                    <tr><td>Tarihi eser tamamen müzede ve dik</td><td>15</td><td><input type="number" id="s_es_f" min="0" max="4" value="0" onchange="validateGroup('s_es_f', ['s_es_f','s_es_p'], 4); calcS();"></td><td id="res_s_es_f">0</td></tr>
+                    <tr><td>Tarihi eser kısmen müzede veya dik değil</td><td>5</td><td><input type="number" id="s_es_p" min="0" max="4" value="0" onchange="validateGroup('s_es_p', ['s_es_f','s_es_p'], 4); calcS();"></td><td id="res_s_es_p">0</td></tr>
 
-                    <tr class="section-header"><td colspan="4">4. Taş Döşemeyi Kirden Temizle</td></tr>
+                    <tr class="section-header"><td colspan="4">4. Taş Döşemeyi Kirden Temizle (Maks 10 Kir)</td></tr>
                     <tr><td>Kir parçacıkları taş döşeme alanına değmiyor</td><td>2</td><td><input type="number" id="s_kir" min="0" max="10" value="0" onchange="calcS()"></td><td id="res_s_kir">0</td></tr>
 
                     <tr class="section-header"><td colspan="4">5. Bonus Puanlar</td></tr>
@@ -193,18 +191,28 @@
 </div>
 
 <script>
-    // Renklendirme Yardımcısı
-    const colors = { 
-        'Sarı': 'c-yellow', 
-        'Lacivert': 'c-blue', 
-        'Siyah': 'c-black', 
-        'Beyaz': 'c-white', 
-        'Kırmızı': 'c-red', 
-        'Yeşil': 'c-green' 
-    };
+    // --- AKILLI LİMİT FONKSİYONU ---
+    // Bu fonksiyon, bir gruptaki girişlerin toplamının maksimum sınırı aşmasını engeller.
+    function validateGroup(changedId, groupIds, maxLimit) {
+        let currentInput = document.getElementById(changedId);
+        let currentVal = parseInt(currentInput.value) || 0;
+        
+        let otherTotal = 0;
+        groupIds.forEach(id => {
+            if (id !== changedId) {
+                otherTotal += parseInt(document.getElementById(id).value) || 0;
+            }
+        });
+
+        if (currentVal + otherTotal > maxLimit) {
+            // Eğer toplam sınırı aşarsa, mevcut girişi kalan miktara sabitler
+            currentInput.value = maxLimit - otherTotal;
+        }
+    }
+
+    const colors = { 'Sarı': 'c-yellow', 'Lacivert': 'c-blue', 'Siyah': 'c-black', 'Beyaz': 'c-white', 'Kırmızı': 'c-red', 'Yeşil': 'c-green' };
     function cS(txt) { return `<span class="${colors[txt] || ''}">${txt}</span>`; }
 
-    // Sekme Geçişi
     function openTab(id, btn) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.getElementById('content-' + id).classList.add('active');
@@ -212,92 +220,32 @@
         btn.classList.add('active');
     }
 
-    // --- PUAN HESAPLAMA (Görsellerdeki verilerle %100 uyumlu) ---
-    
-    // Küçük Yıldızlar
     function calcLS() {
         let total = 0;
-        // Puan Değerleri
-        const p_kb_f = 15, p_kb_p = 5;   // Kablo
-        const p_mk_f = 20, p_mk_p = 10;  // Mikrofon
-        const p_ens = 15;                // Enstrüman
-        const p_nt_f = 20, p_nt_p = 10;  // Nota
-        const p_b_hop = 10;              // Hoparlör (x2)
-
-        // Değerleri Al
-        total += (parseInt(document.getElementById('ls_kb_f').value)||0) * p_kb_f;
-        total += (parseInt(document.getElementById('ls_kb_p').value)||0) * p_kb_p;
-        total += (parseInt(document.getElementById('ls_mk_f').value)||0) * p_mk_f;
-        total += (parseInt(document.getElementById('ls_mk_p').value)||0) * p_mk_p;
-        total += (parseInt(document.getElementById('ls_ens').value)||0) * p_ens;
-        total += (parseInt(document.getElementById('ls_nt_f').value)||0) * p_nt_f;
-        total += (parseInt(document.getElementById('ls_nt_p').value)||0) * p_nt_p;
-        
-        // Bonuslar
-        let bonus = 0;
-        bonus += document.getElementById('ls_bon_sol').checked ? 10 : 0;
-        bonus += (parseInt(document.getElementById('ls_bon_hop').value)||0) * p_b_hop;
-        bonus += document.getElementById('ls_bon_amf').checked ? 10 : 0;
-
-        total += bonus;
-
-        // Ekrana Yazdır (Satır Toplamları)
-        document.getElementById('res_ls_kb_f').innerText = (parseInt(document.getElementById('ls_kb_f').value)||0) * p_kb_f;
-        document.getElementById('res_ls_kb_p').innerText = (parseInt(document.getElementById('ls_kb_p').value)||0) * p_kb_p;
-        document.getElementById('res_ls_mk_f').innerText = (parseInt(document.getElementById('ls_mk_f').value)||0) * p_mk_f;
-        document.getElementById('res_ls_mk_p').innerText = (parseInt(document.getElementById('ls_mk_p').value)||0) * p_mk_p;
-        document.getElementById('res_ls_ens').innerText = (parseInt(document.getElementById('ls_ens').value)||0) * p_ens;
-        document.getElementById('res_ls_nt_f').innerText = (parseInt(document.getElementById('ls_nt_f').value)||0) * p_nt_f;
-        document.getElementById('res_ls_nt_p').innerText = (parseInt(document.getElementById('ls_nt_p').value)||0) * p_nt_p;
-        document.getElementById('res_ls_bon_sol').innerText = document.getElementById('ls_bon_sol').checked ? 10 : 0;
-        document.getElementById('res_ls_bon_hop').innerText = (parseInt(document.getElementById('ls_bon_hop').value)||0) * p_b_hop;
-        document.getElementById('res_ls_bon_amf').innerText = document.getElementById('ls_bon_amf').checked ? 10 : 0;
-
-        document.getElementById('ls_total').innerText = total;
+        const p = { ls_kb_f: 15, ls_kb_p: 5, ls_mk_f: 20, ls_mk_p: 10, ls_ens: 15, ls_nt_f: 20, ls_nt_p: 10, ls_bon_hop: 10 };
+        for(let k in p) {
+            let val = parseInt(document.getElementById(k).value) || 0;
+            document.getElementById('res_'+k).innerText = val * p[k];
+            total += val * p[k];
+        }
+        let sol = document.getElementById('ls_bon_sol').checked ? 10 : 0;
+        let amf = document.getElementById('ls_bon_amf').checked ? 10 : 0;
+        document.getElementById('res_ls_bon_sol').innerText = sol;
+        document.getElementById('res_ls_bon_amf').innerText = amf;
+        document.getElementById('ls_total').innerText = total + sol + amf;
     }
 
-    // Yıldızlar
     function calcS() {
         let total = 0;
-        const p_ziy_f = 10, p_ziy_p = 5; // Ziyaretçi
-        const p_kr_f = 15, p_kr_p = 10;  // Kırmızı Kule
-        const p_sa_f = 25, p_sa_p = 15;  // Sarı Kule
-        const p_es_f = 15, p_es_p = 5;   // Eser
-        const p_kir = 2;                 // Kir
-        const p_bon_bar = 10;            // Bariyer
-
-        // Değerleri Al
-        total += (parseInt(document.getElementById('s_ziy_f').value)||0) * p_ziy_f;
-        total += (parseInt(document.getElementById('s_ziy_p').value)||0) * p_ziy_p;
-        total += (parseInt(document.getElementById('s_kr_f').value)||0) * p_kr_f;
-        total += (parseInt(document.getElementById('s_kr_p').value)||0) * p_kr_p;
-        total += (parseInt(document.getElementById('s_sa_f').value)||0) * p_sa_f;
-        total += (parseInt(document.getElementById('s_sa_p').value)||0) * p_sa_p;
-        total += (parseInt(document.getElementById('s_es_f').value)||0) * p_es_f;
-        total += (parseInt(document.getElementById('s_es_p').value)||0) * p_es_p;
-        total += (parseInt(document.getElementById('s_kir').value)||0) * p_kir;
-
-        // Bonuslar
-        let bonus = 0;
-        bonus += (parseInt(document.getElementById('s_bon_bar').value)||0) * p_bon_bar;
-        bonus += document.getElementById('s_bon_pap').checked ? 10 : 0;
-
-        total += bonus;
-
-        // Ekrana Yazdır
-        document.getElementById('res_s_ziy_f').innerText = (parseInt(document.getElementById('s_ziy_f').value)||0) * p_ziy_f;
-        document.getElementById('res_s_ziy_p').innerText = (parseInt(document.getElementById('s_ziy_p').value)||0) * p_ziy_p;
-        document.getElementById('res_s_kr_f').innerText = (parseInt(document.getElementById('s_kr_f').value)||0) * p_kr_f;
-        document.getElementById('res_s_kr_p').innerText = (parseInt(document.getElementById('s_kr_p').value)||0) * p_kr_p;
-        document.getElementById('res_s_sa_f').innerText = (parseInt(document.getElementById('s_sa_f').value)||0) * p_sa_f;
-        document.getElementById('res_s_sa_p').innerText = (parseInt(document.getElementById('s_sa_p').value)||0) * p_sa_p;
-        document.getElementById('res_s_es_f').innerText = (parseInt(document.getElementById('s_es_f').value)||0) * p_es_f;
-        document.getElementById('res_s_es_p').innerText = (parseInt(document.getElementById('s_es_p').value)||0) * p_es_p;
-        document.getElementById('res_s_kir').innerText = (parseInt(document.getElementById('s_kir').value)||0) * p_kir;
-        document.getElementById('res_s_bon_bar').innerText = (parseInt(document.getElementById('s_bon_bar').value)||0) * p_bon_bar;
-        document.getElementById('res_s_bon_pap').innerText = document.getElementById('s_bon_pap').checked ? 10 : 0;
-
-        document.getElementById('s_total').innerText = total;
+        const p = { s_ziy_f: 10, s_ziy_p: 5, s_kr_f: 15, s_kr_p: 10, s_sa_f: 25, s_sa_p: 15, s_es_f: 15, s_es_p: 5, s_kir: 2, s_bon_bar: 10 };
+        for(let k in p) {
+            let val = parseInt(document.getElementById(k).value) || 0;
+            document.getElementById('res_'+k).innerText = val * p[k];
+            total += val * p[k];
+        }
+        let pap = document.getElementById('s_bon_pap').checked ? 10 : 0;
+        document.getElementById('res_s_bon_pap').innerText = pap;
+        document.getElementById('s_total').innerText = total + pap;
     }
 
     function resetScore(cat) {
@@ -306,24 +254,17 @@
         cat === 'ls' ? calcLS() : calcS();
     }
 
-    // --- İHTİMALLER (Kodlama Takibi) ---
-
-    // Küçük Yıldızlar Kombinasyonları
     function initLSProbs() {
         const cont = document.getElementById('ls-group-container');
         const vars = ['Sarı', 'Lacivert', 'Siyah', 'Beyaz'];
         const fixed = [cS('Kırmızı'), cS('Yeşil')];
-        
-        // Permütasyon
         const getPerms = arr => {
             if (arr.length <= 2) return arr.length === 2 ? [arr, [arr[1], arr[0]]] : [arr];
             return arr.reduce((acc, item, i) => acc.concat(getPerms([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [item, ...val])), []);
         };
-
         const perms = getPerms(vars);
         const groups = {};
         perms.forEach(p => { if(!groups[p[0]]) groups[p[0]] = []; groups[p[0]].push(p); });
-
         cont.innerHTML = "";
         for(let head in groups) {
             let box = `<div class="group-box"><h3 class="group-title">${cS(head)} ile Başlayanlar</h3><div class="checklist-grid">`;
@@ -339,11 +280,9 @@
         }
     }
 
-    // Yıldızlar Kombinasyonları
     function initSProbs() {
         const cont = document.getElementById('s-matrix-container');
         const list = ['Kırmızı', 'Sarı', 'Yeşil', 'Siyah', 'Beyaz', 'Lacivert'];
-        
         cont.innerHTML = "";
         list.forEach(f => {
             let box = `<div class="group-box"><h3 class="group-title">İlk Renk: ${cS(f)}</h3><div class="checklist-grid">`;
