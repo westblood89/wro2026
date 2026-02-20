@@ -77,7 +77,7 @@
         .group-title { margin-top: 0; color: #444; border-bottom: 2px solid #ddd; padding-bottom: 8px; margin-bottom: 15px; }
 
         .action-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .btn { border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; }
+        .btn { border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; display:flex; align-items:center; gap:8px;}
         .btn-clear { background: #ff9800; }
         .btn-save { background: #2196F3; }
         .btn-load { background: #673AB7; }
@@ -135,9 +135,9 @@
     <div id="content-prob-ls" class="tab-content">
         <h2>Küçük Yıldızlar İhtimaller Listesi</h2>
         <div class="action-bar">
-            <button class="btn btn-clear" onclick="clearProb('ls')">Listeyi Temizle</button>
-            <button class="btn btn-save" onclick="saveJSON('ls')">Kaydet (.json)</button>
-            <button class="btn btn-load" onclick="document.getElementById('file-ls').click()">Yükle</button>
+            <button class="btn btn-clear" onclick="clearProb('ls')">🗑️ Listeyi Temizle</button>
+            <button class="btn btn-save" onclick="saveJSON('ls')">💾 Kaydet</button>
+            <button class="btn btn-load" onclick="document.getElementById('file-ls').click()">📂 Yükle</button>
             <input type="file" id="file-ls" style="display:none" onchange="loadJSON(event, 'ls')">
         </div>
         <div id="ls-group-container"></div>
@@ -181,9 +181,9 @@
     <div id="content-prob-s" class="tab-content">
         <h2>Yıldızlar İhtimaller Listesi</h2>
         <div class="action-bar">
-            <button class="btn btn-clear" onclick="clearProb('s')">Listeyi Temizle</button>
-            <button class="btn btn-save" onclick="saveJSON('s')">Kaydet (.json)</button>
-            <button class="btn btn-load" onclick="document.getElementById('file-s').click()">Yükle</button>
+            <button class="btn btn-clear" onclick="clearProb('s')">🗑️ Listeyi Temizle</button>
+            <button class="btn btn-save" onclick="saveJSON('s')">💾 Kaydet</button>
+            <button class="btn btn-load" onclick="document.getElementById('file-s').click()">📂 Yükle</button>
             <input type="file" id="file-s" style="display:none" onchange="loadJSON(event, 's')">
         </div>
         <div id="s-matrix-container"></div>
@@ -192,7 +192,6 @@
 
 <script>
     // --- AKILLI LİMİT FONKSİYONU ---
-    // Bu fonksiyon, bir gruptaki girişlerin toplamının maksimum sınırı aşmasını engeller.
     function validateGroup(changedId, groupIds, maxLimit) {
         let currentInput = document.getElementById(changedId);
         let currentVal = parseInt(currentInput.value) || 0;
@@ -205,7 +204,6 @@
         });
 
         if (currentVal + otherTotal > maxLimit) {
-            // Eğer toplam sınırı aşarsa, mevcut girişi kalan miktara sabitler
             currentInput.value = maxLimit - otherTotal;
         }
     }
